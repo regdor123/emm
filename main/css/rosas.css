@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Playfair Display', serif;
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 35px 50px;
+  border-radius: 25px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 2.7rem;
+  margin-bottom: 25px;
+  color: #ff4c77;
+  text-shadow: 0 0 15px #ff4c77;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 15px #ff4c77; }
+  50% { text-shadow: 0 0 40px #ff99aa; }
+}
+
+.flower-rose {
+  position: relative;
+  width: 140px;
+  height: 200px;
+  margin: 0 auto 30px;
+}
+
+.center {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #ff4c77, #b3003c);
+  border-radius: 50%;
+  box-shadow: 0 0 15px #ff4c77;
+}
+
+.petal-rose {
+  position: absolute;
+  width: 60px;
+  height: 90px;
+  background: linear-gradient(135deg, #ff7b91, #b3003c);
+  border-radius: 60% 60% 80% 80%;
+  opacity: 0.9;
+  animation: swayPetal 5s ease-in-out infinite;
+}
+
+.petal1 { top: 20px; left: 10px; transform: rotate(-30deg); }
+.petal2 { top: 20px; right: 10px; transform: rotate(30deg); }
+.petal3 { top: 5px; left: 35px; transform: rotate(-10deg); }
+.petal4 { top: 5px; right: 35px; transform: rotate(10deg); }
+
+@keyframes swayPetal {
+  0%, 100% { transform: scale(1) rotate(var(--angle)); }
+  50% { transform: scale(1.05) rotate(calc(var(--angle) + 5deg)); }
+}
+
+.stem {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 8px;
+  height: 100px;
+  background: linear-gradient(to top, #2e7d32, #81c784);
+  border-radius: 4px;
+  transform: translateX(-50%);
+  animation: stemMove 4s ease-in-out infinite;
+}
+
+@keyframes stemMove {
+  0%, 100% { transform: translateX(-50%) rotate(-2deg); }
+  50% { transform: translateX(-50%) rotate(2deg); }
+}
+
+.btn {
+  background-color: #ff4c77;
+  padding: 12px 28px;
+  border-radius: 50px;
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 4px 20px #ff4c77aa;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #b3003c;
+  transform: scale(1.05);
+}
+
+.real-petal {
+  position: fixed;
+  top: -20px;
+  width: 14px;
+  height: 20px;
+  background: radial-gradient(ellipse at center, #ff8fa3 0%, #ff4c77 100%);
+  border-radius: 50% 50% 60% 60%;
+  pointer-events: none;
+  z-index: 2;
+}

@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: black;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  user-select: none;
+  position: relative;
+}
+
+#fondo-orbes {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #111, #000);
+  overflow: hidden;
+  z-index: 0;
+}
+
+.orbe {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: drop-shadow(0 0 3px white);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.contenedor-juego {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 30px 50px;
+  border-radius: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px #ff4081aa;
+  width: 380px;
+  user-select: none;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #ff4081;
+  text-shadow: 0 0 8px #ff4081;
+}
+
+#area-juego {
+  position: relative;
+  background: #111;
+  border-radius: 15px;
+  height: 300px;
+  overflow: hidden;
+  margin: 0 auto 15px;
+}
+
+  .circulo {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at center, #ff4081, #b0003a);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 20px #ff4081aa;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.circulo:active {
+  transform: scale(0.85);
+}
+
+.marcador {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: #ff4081;
+  font-weight: 700;
+}
+
+#boton-reiniciar {
+  background: #ff4081;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 26px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 15px;
+}
+
+#boton-reiniciar:hover {
+  background: #d03570;
+}
+
+.boton-volver {
+  color: #ff4081;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.boton-volver:hover {
+  text-decoration: underline;
+}

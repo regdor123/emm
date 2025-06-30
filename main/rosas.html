@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rosas</title>
+
+  <link rel="stylesheet" href="css/fondo.css" />
+  <link rel="stylesheet" href="css/rosas.css" />
+</head>
+<body>
+
+  <div class="background-bubbles"></div>
+
+  <main class="container">
+    <h1 class="title">🌹 Rosas</h1>
+
+    <div class="flower-rose">
+      <div class="center"></div>
+      <div class="petal-rose petal1"></div>
+      <div class="petal-rose petal2"></div>
+      <div class="petal-rose petal3"></div>
+      <div class="petal-rose petal4"></div>
+      <div class="stem"></div>
+    </div>
+
+    <a href="index.html" class="btn">← Volver</a>
+  </main>
+
+  <script>
+    const styleSheet = document.createElement('style');
+    document.head.appendChild(styleSheet);
+
+    function createUniquePetal() {
+      const petal = document.createElement("div");
+      petal.classList.add("real-petal");
+
+      const left = Math.random() * 100;
+      petal.style.left = left + "vw";
+
+      const scale = 0.6 + Math.random() * 0.6;
+      petal.style.transform = `scale(${scale})`;
+
+      petal.style.opacity = 0.6 + Math.random() * 0.4;
+
+      const duration = 6 + Math.random() * 4;
+      petal.style.animationDuration = duration + "s";
+
+      const animName = `fall-petal-${Date.now()}-${Math.floor(Math.random()*1000)}`;
+
+      const x1 = Math.floor(Math.random() * 30) - 15;  
+      const x2 = Math.floor(Math.random() * 30) - 15;
+      const r1 = Math.floor(Math.random() * 360);      
+      const r2 = Math.floor(Math.random() * 360);
+      const r3 = Math.floor(Math.random() * 360);
+
+    
+      const keyframes = `
+        @keyframes ${animName} {
+          0% {
+            transform: translateX(0) rotate(0deg) scale(${scale});
+            opacity: 0.9;
+          }
+          25% {
+            transform: translateX(${x1}px) rotate(${r1}deg) scale(${scale});
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateX(${x2}px) rotate(${r2}deg) scale(${scale});
+            opacity: 0.6;
+          }
+          75% {
+            transform: translateX(${x1}px) rotate(${r3}deg) scale(${scale});
+            opacity: 0.4;
+          }
+          100% {
+            transform: translateY(100vh) rotate(${r3 + 100}deg) scale(${scale});
+            opacity: 0;
+          }
+        }
+      `;
+
+      styleSheet.sheet.insertRule(keyframes, styleSheet.sheet.cssRules.length);
+
+      petal.style.animationName = animName;
+      petal.style.animationTimingFunction = 'linear';
+      petal.style.animationFillMode = 'forwards';
+
+      document.body.appendChild(petal);
+
+      setTimeout(() => {
+        petal.remove();
+      }, duration * 1000);
+    }
+
+    for (let i = 0; i < 15; i++) {
+      setTimeout(createUniquePetal, i * 150);
+    }
+
+    setInterval(createUniquePetal, 250);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="stylesheet" href="css/flor.css" />
+  <link rel="icon" href="img/flores.png" type="image/x-icon" />
+  
+  <title>Tulipanes & Corazones</title>
+</head>
+<body class="container">
+  
+ 
+
+  <div class="hearts" aria-hidden="true">
+    <div class="heart heart--1"></div>
+    <div class="heart heart--2"></div>
+    <div class="heart heart--3"></div>
+    <div class="heart heart--4"></div>
+    <div class="heart heart--5"></div>
+  </div>
+
+  <div class="flower__g-fr">
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--1"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--2"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--3"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--4"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--5"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--6"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--7"></div>
+    <div class="leaf flower__g-fr__leaf flower__g-fr__leaf--8"></div>
+  </div>
+
+  <h1 class="titulo" style="font-family: serif, sans-serif;">
+    Me quede sin ideas para este apartado JAJAJAJAJAJAJAJAJAJAJAJAJAJJAJA
+  </h1>
+
+  <div class="greetings" aria-label="Nombre Anahi">
+    <span>H</span>
+    <span>o</span>
+    <span>l</span>
+    <span>i</span>
+    <span>i</span>
+  </div>
+
+  <button 
+    class="reveal-btn" 
+    aria-controls="secret-message" 
+    aria-expanded="false"
+    aria-label="Mostrar mensaje secreto"
+    onclick="revealSecretMessage(this)"
+  >
+    Haz clic aquí
+  </button>
+  
+
+  <div id="secret-message" class="secret-message" role="region" aria-live="polite">
+    Recuerda que eres alguien importante para mi ❤️
+  </div>
+
+  <script src="main.js"></script>
+
+  <script>
+    function revealSecretMessage(button) {
+      const message = document.getElementById('secret-message');
+      message.classList.add('show');
+      button.setAttribute('aria-expanded', 'true');
+      button.disabled = true; 
+    }
+  </script>
+    <a href="index.html" class="reveal-btn">← Volver</a>
+
+  
+</body>
+</html>
