@@ -1,27 +1,819 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Juego de Toque</title>
-  <link rel="stylesheet" href="css/juego.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Anahi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Bubblegum Sans', cursive;
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1, #ffc0cb, #ff1493);
+            background-size: 400% 400%;
+            animation: gradientShift 6s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .game-container {
+            width: 900px;
+            height: 700px;
+            background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 50%, #ffe4e1 100%);
+            border: 10px solid #ff69b4;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 182, 193, 0.8));
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #ff69b4;
+            backdrop-filter: blur(10px);
+        }
+        
+        .score {
+            font-size: 28px;
+            color: #ff1493;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .lives {
+            font-size: 24px;
+            color: #ff1493;
+            font-weight: bold;
+        }
+        
+        .level {
+            font-size: 20px;
+            color: #ff1493;
+            font-weight: bold;
+        }
+        
+        .game-area {
+            width: 100%;
+            height: calc(100% - 80px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hello-kitty {
+            width: 100px;
+            height: 120px;
+            position: absolute;
+            bottom: 30px;
+            left: 400px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            z-index: 10;
+            background-image: url('img/image.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.3));
+        }
+        
+        /* Respaldo en caso de que la imagen no cargue */
+        .hello-kitty-fallback {
+            width: 100px;
+            height: 120px;
+            position: absolute;
+            bottom: 30px;
+            left: 400px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            z-index: 10;
+        }
+        
+        .kitty-body {
+            width: 80px;
+            height: 80px;
+            background: #ffffff;
+            border: 4px solid #000;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .kitty-ears {
+            position: absolute;
+            width: 25px;
+            height: 30px;
+            background: #ffffff;
+            border: 3px solid #000;
+            border-radius: 50% 50% 0 0;
+            top: -15px;
+        }
+        
+        .kitty-ears.left {
+            left: 10px;
+            transform: rotate(-20deg);
+        }
+        
+        .kitty-ears.right {
+            right: 10px;
+            transform: rotate(20deg);
+        }
+        
+        .kitty-eyes {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            top: 25px;
+        }
+        
+        .kitty-eyes.left {
+            left: 20px;
+        }
+        
+        .kitty-eyes.right {
+            right: 20px;
+        }
+        
+        .kitty-nose {
+            position: absolute;
+            width: 6px;
+            height: 4px;
+            background: #ff69b4;
+            border-radius: 50%;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .kitty-bow {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 25px;
+            background: #ff1493;
+            border-radius: 10px;
+            border: 2px solid #000;
+        }
+        
+        .kitty-bow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 15px;
+            background: #000;
+            border-radius: 2px;
+        }
+        
+        .kitty-bow::after {
+            content: '🎀';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+        }
+        
+        .kitty-dress {
+            width: 90px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: 3px solid #000;
+            border-radius: 0 0 45px 45px;
+            margin-top: -10px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .kitty-dress::before {
+            content: '🎀';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+        
+        .item {
+            position: absolute;
+            font-size: 30px;
+            animation: fall linear;
+            z-index: 5;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        
+        .power-up {
+            position: absolute;
+            font-size: 35px;
+            animation: fall linear;
+            z-index: 5;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes fall {
+            from {
+                top: -60px;
+                transform: rotate(0deg);
+            }
+            to {
+                top: 700px;
+                transform: rotate(360deg);
+            }
+        }
+        
+        .star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .cloud {
+            position: absolute;
+            color: white;
+            font-size: 50px;
+            opacity: 0.8;
+            animation: float 10s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-15px) translateX(10px); }
+            75% { transform: translateY(15px) translateX(-10px); }
+        }
+        
+        .rainbow {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,0,0,0.3), 
+                rgba(255,165,0,0.3), 
+                rgba(255,255,0,0.3), 
+                rgba(0,255,0,0.3), 
+                rgba(0,0,255,0.3), 
+                rgba(75,0,130,0.3), 
+                rgba(238,130,238,0.3), 
+                transparent
+            );
+            animation: rainbow-move 15s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes rainbow-move {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ff69b4;
+            border-radius: 50%;
+            animation: particle-float 3s ease-out forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes particle-float {
+            0% { 
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .score-popup {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff1493;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: score-popup 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        @keyframes score-popup {
+            0% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1.5) translateY(-50px);
+                opacity: 0;
+            }
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 182, 193, 0.9));
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            border: 6px solid #ff69b4;
+            display: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(255, 105, 180, 0.8);
+        }
+        
+        .game-over h2 {
+            color: #ff1493;
+            font-size: 42px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .game-over p {
+            color: #ff69b4;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Bubblegum Sans', cursive;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+        }
+        
+        .instructions {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 182, 193, 0.8));
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            color: #ff1493;
+            border: 3px solid #ff69b4;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .combo-indicator {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid #ff69b4;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff1493;
+            display: none;
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .moving {
+            animation: kitty-bounce 0.3s ease-in-out;
+        }
+        
+        @keyframes kitty-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
 </head>
 <body>
-
-  <div id="fondo-orbes"></div>
-
-  <main class="contenedor-juego">
-    <h1>🎯 Toca el círculo 🎯</h1>
-    <div id="area-juego"></div>
-    <div class="marcador">
-      Puntos: <span id="puntaje">0</span>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score">⭐ Puntuación: <span id="score">0</span></div>
+            <div class="level">Nivel: <span id="level">1</span></div>
+            <div class="lives">Vidas: <span id="lives">3</span> 💖</div>
+        </div>
+        
+        <div class="instructions">
+            🎮 Usa ← → o A/D para mover a Hello Kitty. ¡Atrapa corazones, evita obstáculos y consigue power-ups! 🎮
+        </div>
+        
+        <div class="combo-indicator" id="comboIndicator">
+            🔥 COMBO x<span id="comboCount">0</span> 🔥
+        </div>
+        
+        <div class="game-area" id="gameArea">
+            <div class="rainbow"></div>
+            
+            <!-- Estrellas decorativas -->
+            <div class="star" style="top: 80px; left: 100px; animation-delay: 0s;">⭐</div>
+            <div class="star" style="top: 150px; right: 150px; animation-delay: 1s;">✨</div>
+            <div class="star" style="top: 220px; left: 200px; animation-delay: 2s;">🌟</div>
+            <div class="star" style="top: 300px; right: 100px; animation-delay: 0.5s;">💫</div>
+            <div class="star" style="top: 180px; left: 50px; animation-delay: 1.5s;">⭐</div>
+            
+            <!-- Nubes decorativas -->
+            <div class="cloud" style="top: 100px; left: 50px; animation-delay: 0s;">☁️</div>
+            <div class="cloud" style="top: 200px; right: 100px; animation-delay: 3s;">☁️</div>
+            <div class="cloud" style="top: 300px; left: 150px; animation-delay: 6s;">☁️</div>
+            
+            <div class="hello-kitty" id="helloKitty">
+                <!-- Si la imagen no carga, se mostrará el diseño CSS como respaldo -->
+                <div class="hello-kitty-fallback" style="display: none;">
+                    <div class="kitty-body">
+                        <div class="kitty-ears left"></div>
+                        <div class="kitty-ears right"></div>
+                        <div class="kitty-eyes left"></div>
+                        <div class="kitty-eyes right"></div>
+                        <div class="kitty-nose"></div>
+                        <div class="kitty-bow"></div>
+                    </div>
+                    <div class="kitty-dress"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h2>¡Juego Terminado!</h2>
+            <p>Puntuación Final: <span id="finalScore">0</span></p>
+            <p>Nivel Alcanzado: <span id="finalLevel">1</span></p>
+            <button class="restart-btn" onclick="restartGame()">🌟 ¡Jugar de Nuevo! 🌟</button>
+        </div>
     </div>
-    <button id="boton-reiniciar">Reiniciar</button>
-    <a href="index.html" class="boton-volver">← Volver</a>
-  </main>
 
-  <script src="js/juego.js"></script>
-  <script src="js/orbes.js"></script>
-
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const helloKitty = document.getElementById('helloKitty');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const levelElement = document.getElementById('level');
+        const gameOverElement = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+        const finalLevelElement = document.getElementById('finalLevel');
+        const comboIndicator = document.getElementById('comboIndicator');
+        const comboCount = document.getElementById('comboCount');
+        
+        let gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            kittyPosition: 400,
+            gameRunning: true,
+            items: [],
+            gameSpeed: 1,
+            combo: 0,
+            maxCombo: 0,
+            lastCollectTime: 0
+        };
+        
+        const heartEmojis = ['💖', '💕', '💗', '💝', '💘', '💌', '💞', '💓'];
+        const obstacleEmojis = ['🌧️', '⚡', '🌪️', '❄️', '🌊', '🔥', '☄️', '🌑'];
+        const powerUpEmojis = ['🌟', '✨', '💫', '🎁', '🍰', '🧁', '🎀', '👑'];
+        
+        let keys = {};
+        
+        // Controles del teclado mejorados
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            if (!gameState.gameRunning) return;
+            
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                helloKitty.classList.add('moving');
+            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                helloKitty.classList.add('moving');
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+            helloKitty.classList.remove('moving');
+        });
+        
+        function updateMovement() {
+            if (!gameState.gameRunning) return;
+            
+            let movement = 0;
+            if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+                movement = -5;
+            }
+            if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+                movement = 5;
+            }
+            
+            if (movement !== 0) {
+                moveKitty(movement);
+            }
+        }
+        
+        function moveKitty(direction) {
+            const newPosition = gameState.kittyPosition + direction;
+            if (newPosition >= 0 && newPosition <= 800) {
+                gameState.kittyPosition = newPosition;
+                helloKitty.style.left = newPosition + 'px';
+            }
+        }
+        
+        function createItem(type = 'heart') {
+            const item = document.createElement('div');
+            let emoji, className;
+            
+            switch(type) {
+                case 'heart':
+                    emoji = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    className = 'item heart';
+                    break;
+                case 'obstacle':
+                    emoji = obstacleEmojis[Math.floor(Math.random() * obstacleEmojis.length)];
+                    className = 'item obstacle';
+                    break;
+                case 'powerup':
+                    emoji = powerUpEmojis[Math.floor(Math.random() * powerUpEmojis.length)];
+                    className = 'power-up';
+                    break;
+            }
+            
+            item.className = className;
+            item.innerHTML = emoji;
+            item.style.left = Math.random() * 800 + 'px';
+            
+            const fallDuration = Math.max(2 - gameState.gameSpeed * 0.3, 0.8);
+            item.style.animationDuration = fallDuration + 's';
+            
+            gameArea.appendChild(item);
+            gameState.items.push({
+                element: item,
+                type: type,
+                x: parseInt(item.style.left),
+                y: -60
+            });
+            
+            setTimeout(() => {
+                if (item.parentNode) {
+                    item.parentNode.removeChild(item);
+                    gameState.items = gameState.items.filter(i => i.element !== item);
+                }
+            }, fallDuration * 1000);
+        }
+        
+        function createParticles(x, y, color = '#ff69b4') {
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = color;
+                particle.style.animationDelay = Math.random() * 0.5 + 's';
+                gameArea.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 3000);
+            }
+        }
+        
+        function showScorePopup(x, y, points, text = '') {
+            const popup = document.createElement('div');
+            popup.className = 'score-popup';
+            popup.innerHTML = text || `+${points}`;
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            gameArea.appendChild(popup);
+            
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.parentNode.removeChild(popup);
+                }
+            }, 1000);
+        }
+        
+        function updateCombo() {
+            const now = Date.now();
+            if (now - gameState.lastCollectTime > 3000) {
+                gameState.combo = 0;
+                comboIndicator.style.display = 'none';
+            }
+            
+            if (gameState.combo > 0) {
+                comboCount.textContent = gameState.combo;
+                comboIndicator.style.display = 'block';
+            }
+        }
+        
+        function checkCollisions() {
+            const kittyRect = {
+                x: gameState.kittyPosition,
+                y: 500,
+                width: 100,
+                height: 120
+            };
+            
+            gameState.items.forEach((item, index) => {
+                const itemRect = item.element.getBoundingClientRect();
+                const gameAreaRect = gameArea.getBoundingClientRect();
+                
+                const itemY = itemRect.top - gameAreaRect.top;
+                
+                if (itemY > 480 && itemY < 620 && 
+                    item.x > kittyRect.x - 30 && item.x < kittyRect.x + 100) {
+                    
+                    const now = Date.now();
+                    let points = 0;
+                    
+                    if (item.type === 'heart') {
+                        points = 10 + (gameState.combo * 2);
+                        gameState.score += points;
+                        gameState.combo++;
+                        gameState.lastCollectTime = now;
+                        
+                        if (gameState.combo > gameState.maxCombo) {
+                            gameState.maxCombo = gameState.combo;
+                        }
+                        
+                        createParticles(item.x, itemY, '#ff69b4');
+                        showScorePopup(item.x, itemY, points);
+                        
+                        // Nivel up cada 100 puntos
+                        if (gameState.score >= gameState.level * 100) {
+                            gameState.level++;
+                            gameState.gameSpeed = Math.min(gameState.gameSpeed + 0.3, 4);
+                            levelElement.textContent = gameState.level;
+                            showScorePopup(kittyRect.x, kittyRect.y, 0, '¡NIVEL UP!');
+                        }
+                        
+                    } else if (item.type === 'powerup') {
+                        points = 50;
+                        gameState.score += points;
+                        gameState.lives = Math.min(gameState.lives + 1, 5);
+                        livesElement.textContent = gameState.lives;
+                        
+                        createParticles(item.x, itemY, '#ffd700');
+                        showScorePopup(item.x, itemY, points, '¡POWER UP!');
+                        
+                    } else {
+                        gameState.lives--;
+                        gameState.combo = 0;
+                        livesElement.textContent = gameState.lives;
+                        
+                        createParticles(item.x, itemY, '#ff0000');
+                        showScorePopup(item.x, itemY, 0, '¡AUCH!');
+                        
+                        // Efecto de daño
+                        helloKitty.style.filter = 'brightness(0.5)';
+                        setTimeout(() => {
+                            helloKitty.style.filter = 'brightness(1)';
+                        }, 300);
+                        
+                        if (gameState.lives <= 0) {
+                            endGame();
+                        }
+                    }
+                    
+                    scoreElement.textContent = gameState.score;
+                    
+                    // Remover item
+                    if (item.element.parentNode) {
+                        item.element.parentNode.removeChild(item.element);
+                    }
+                    gameState.items.splice(index, 1);
+                }
+            });
+        }
+        
+        function endGame() {
+            gameState.gameRunning = false;
+            finalScoreElement.textContent = gameState.score;
+            finalLevelElement.textContent = gameState.level;
+            gameOverElement.style.display = 'block';
+            comboIndicator.style.display = 'none';
+        }
+        
+        function restartGame() {
+            gameState = {
+                score: 0,
+                lives: 3,
+                level: 1,
+                kittyPosition: 400,
+                gameRunning: true,
+                items: [],
+                gameSpeed: 1,
+                combo: 0,
+                maxCombo: 0,
+                lastCollectTime: 0
+            };
+            
+            scoreElement.textContent = '0';
+            livesElement.textContent = '3';
+            levelElement.textContent = '1';
+            helloKitty.style.left = '400px';
+            helloKitty.style.filter = 'brightness(1)';
+            gameOverElement.style.display = 'none';
+            comboIndicator.style.display = 'none';
+            
+            // Limpiar items existentes
+            gameState.items.forEach(item => {
+                if (item.element.parentNode) {
+                    item.element.parentNode.removeChild(item.element);
+                }
+            });
+            gameState.items = [];
+            
+            // Limpiar partículas y popups
+            const particles = document.querySelectorAll('.particle, .score-popup');
+            particles.forEach(p => {
+                if (p.parentNode) {
+                    p.parentNode.removeChild(p);
+                }
+            });
+            
+            startGame();
+        }
+        
+        function gameLoop() {
+            if (!gameState.gameRunning) return;
+            
+            updateMovement();
+            checkCollisions();
+            updateCombo();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function startGame() {
+            gameLoop();
+            
+            // Crear corazones
+            setInterval(() => {
+                if (gameState.gameRunning && Math.random() < 0.8) {
+                    createItem('heart');
+                }
+            }, 800);
+            
+            // Crear obstáculos
+            setInterval(() => {
+                if (gameState.gameRunning && Math.random() < 0.4) {
+                    createItem('obstacle');
+                }
+            }, 1200);
+            
+            // Crear power-ups
+            setInterval(() => {
+                if (gameState.gameRunning && Math.random() < 0.2) {
+                    createItem('powerup');
+                }
+            }, 3000);
+        }
+        
+        // Iniciar el juego
+        startGame();
+    </script>
 </body>
 </html>
