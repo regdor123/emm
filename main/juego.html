@@ -7,40 +7,64 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans:wght@400;700&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Bubblegum Sans', cursive;
-            background: linear-gradient(45deg, #ff69b4, #ffb6c1, #ffc0cb, #ff1493);
-            background-size: 400% 400%;
-            animation: gradientShift 6s ease infinite;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .game-container {
-            width: 900px;
-            height: 700px;
-            background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 50%, #ffe4e1 100%);
-            border: 10px solid #ff69b4;
-            border-radius: 25px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.3);
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Bubblegum Sans', cursive;
+      background: linear-gradient(45deg, #ff69b4, #ffb6c1, #ffc0cb, #ff1493);
+      background-size: 400% 400%;
+      animation: gradientShift 6s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .game-container {
+      width: 900px;
+      height: 700px;
+      background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 50%, #ffe4e1 100%);
+      border: 10px solid #ff69b4;
+      border-radius: 25px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    @media (max-width: 1000px) {
+      .game-container {
+        width: 95vw;
+        height: 75vh;
+      }
+      .touch-controls {
+        display: flex;
+      }
+    }
+    .touch-controls {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      display: none;
+      justify-content: space-around;
+      z-index: 100;
+    }
+    .touch-controls button {
+      background: #ff69b4;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 15px;
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      font-family: 'Bubblegum Sans', cursive;
+    }
         
         .game-header {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 182, 193, 0.8));
@@ -225,17 +249,6 @@
             z-index: 5;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
-        @media (max-width: 1000px) {
-    .game-container {
-        width: 95vw;
-        height: 70vh;
-    }
-    
-    .hello-kitty {
-        width: 12vw;
-        height: 14vw;
-    }
-}
         
         .power-up {
             position: absolute;
@@ -317,12 +330,7 @@
             animation: particle-float 3s ease-out forwards;
             pointer-events: none;
         }
-        @media (min-width: 1000px) {
-    #touchControls {
-        display: none;
-    }
-}
-
+        
         @keyframes particle-float {
             0% { 
                 transform: translateY(0) scale(1);
@@ -451,132 +459,80 @@
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="game-header">
-            <div class="score">⭐ Puntuación: <span id="score">0</span></div>
-            <div class="level">Nivel: <span id="level">1</span></div>
-            <div class="lives">Vidas: <span id="lives">3</span> 💖</div>
-        </div>
-        
-        <div class="instructions">
-            🎮 Usa ← → o A/D para mover a Hello Kitty. ¡Atrapa corazones, evita obstáculos y consigue power-ups! 🎮
-        </div>
-        
-        <div class="combo-indicator" id="comboIndicator">
-            🔥 COMBO x<span id="comboCount">0</span> 🔥
-        </div>
-        
-        <div class="game-area" id="gameArea">
-            <div class="rainbow"></div>
-            
-            <!-- Estrellas decorativas -->
-            <div class="star" style="top: 80px; left: 100px; animation-delay: 0s;">⭐</div>
-            <div class="star" style="top: 150px; right: 150px; animation-delay: 1s;">✨</div>
-            <div class="star" style="top: 220px; left: 200px; animation-delay: 2s;">🌟</div>
-            <div class="star" style="top: 300px; right: 100px; animation-delay: 0.5s;">💫</div>
-            <div class="star" style="top: 180px; left: 50px; animation-delay: 1.5s;">⭐</div>
-            
-            <!-- Nubes decorativas -->
-            <div class="cloud" style="top: 100px; left: 50px; animation-delay: 0s;">☁️</div>
-            <div class="cloud" style="top: 200px; right: 100px; animation-delay: 3s;">☁️</div>
-            <div class="cloud" style="top: 300px; left: 150px; animation-delay: 6s;">☁️</div>
-            
-            <div class="hello-kitty" id="helloKitty">
-                <!-- Si la imagen no carga, se mostrará el diseño CSS como respaldo -->
-                <div class="hello-kitty-fallback" style="display: none;">
-                    <div class="kitty-body">
-                        <div class="kitty-ears left"></div>
-                        <div class="kitty-ears right"></div>
-                        <div class="kitty-eyes left"></div>
-                        <div class="kitty-eyes right"></div>
-                        <div class="kitty-nose"></div>
-                        <div class="kitty-bow"></div>
-                    </div>
-                    <!-- Controles táctiles -->
-<div id="touchControls" style="position: absolute; bottom: 10px; width: 100%; text-align: center; z-index: 50;">
-    <button id="leftBtn" style="padding: 20px 30px; font-size: 24px; margin: 0 20px; border-radius: 15px; border: none; background: #ff69b4; color: white;">⬅️</button>
-    <button id="rightBtn" style="padding: 20px 30px; font-size: 24px; margin: 0 20px; border-radius: 15px; border: none; background: #ff69b4; color: white;">➡️</button>
-</div>
-
-                    <div class="kitty-dress"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="game-over" id="gameOver">
-            <h2>¡Juego Terminado!</h2>
-            <p>Puntuación Final: <span id="finalScore">0</span></p>
-            <p>Nivel Alcanzado: <span id="finalLevel">1</span></p>
-            <button class="restart-btn" onclick="restartGame()">🌟 ¡Jugar de Nuevo! 🌟</button>
-        </div>
+  <div class="game-container">
+    <div class="game-header">
+      <div class="score">⭐ Puntuación: <span id="score">0</span></div>
+      <div class="level">Nivel: <span id="level">1</span></div>
+      <div class="lives">Vidas: <span id="lives">3</span> 💖</div>
     </div>
+    <div class="instructions">
+      🎮 Usa ← → o A/D para mover a Hello Kitty. ¡Atrapa corazones, evita obstáculos y consigue power-ups! 🎮
+    </div>
+    <div class="combo-indicator" id="comboIndicator">
+      🔥 COMBO x<span id="comboCount">0</span> 🔥
+    </div>
+    <div class="game-area" id="gameArea">
+      <div class="rainbow"></div>
+      <!-- Estrellas decorativas -->
+      <div class="star" style="top: 80px; left: 100px; animation-delay: 0s;">⭐</div>
+      <div class="star" style="top: 150px; right: 150px; animation-delay: 1s;">✨</div>
+      <div class="star" style="top: 220px; left: 200px; animation-delay: 2s;">🌟</div>
+      <div class="star" style="top: 300px; right: 100px; animation-delay: 0.5s;">💫</div>
+      <div class="star" style="top: 180px; left: 50px; animation-delay: 1.5s;">⭐</div>
+      <!-- Nubes decorativas -->
+      <div class="cloud" style="top: 100px; left: 50px; animation-delay: 0s;">☁️</div>
+      <div class="cloud" style="top: 200px; right: 100px; animation-delay: 3s;">☁️</div>
+      <div class="cloud" style="top: 300px; left: 150px; animation-delay: 6s;">☁️</div>
+      <div class="hello-kitty" id="helloKitty">
+        <div class="hello-kitty-fallback" style="display: none;">
+          <div class="kitty-body">
+            <div class="kitty-ears left"></div>
+            <div class="kitty-ears right"></div>
+            <div class="kitty-eyes left"></div>
+            <div class="kitty-eyes right"></div>
+            <div class="kitty-nose"></div>
+            <div class="kitty-bow"></div>
+          </div>
+          <div class="kitty-dress"></div>
+        </div>
+      </div>
+    </div>
+    <div class="touch-controls">
+      <button id="btnLeft">⬅️</button>
+      <button id="btnRight">➡️</button>
+    </div>
+    <div class="game-over" id="gameOver">
+      <h2>¡Juego Terminado!</h2>
+      <p>Puntuación Final: <span id="finalScore">0</span></p>
+      <p>Nivel Alcanzado: <span id="finalLevel">1</span></p>
+      <button class="restart-btn" onclick="restartGame()">🌟 ¡Jugar de Nuevo! 🌟</button>
+    </div>
+  </div>
+
 
     <script>
-        const gameArea = document.getElementById('gameArea');
-        const helloKitty = document.getElementById('helloKitty');
-        const scoreElement = document.getElementById('score');
-        const livesElement = document.getElementById('lives');
-        const levelElement = document.getElementById('level');
-        const gameOverElement = document.getElementById('gameOver');
-        const finalScoreElement = document.getElementById('finalScore');
-        const finalLevelElement = document.getElementById('finalLevel');
-        const comboIndicator = document.getElementById('comboIndicator');
-        const comboCount = document.getElementById('comboCount');
-        
-        let gameState = {
-            score: 0,
-            lives: 3,
-            level: 1,
-            kittyPosition: 400,
-            gameRunning: true,
-            items: [],
-            gameSpeed: 1,
-            combo: 0,
-            maxCombo: 0,
-            lastCollectTime: 0
-        };
-        
-        const heartEmojis = ['💖', '💕', '💗', '💝', '💘', '💌', '💞', '💓'];
-        const obstacleEmojis = ['🌧️', '⚡', '🌪️', '❄️', '🌊', '🔥', '☄️', '🌑'];
-        const powerUpEmojis = ['🌟', '✨', '💫', '🎁', '🍰', '🧁', '🎀', '👑'];
-        
-        let keys = {};
-        
-        // Controles del teclado mejorados
-        document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            if (!gameState.gameRunning) return;
-            
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-                helloKitty.classList.add('moving');
-            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-                helloKitty.classList.add('moving');
-            }
-        });
-        const leftBtn = document.getElementById('leftBtn');
-const rightBtn = document.getElementById('rightBtn');
+    const gameArea = document.getElementById('gameArea');
+    const helloKitty = document.getElementById('helloKitty');
+    const scoreElement = document.getElementById('score');
+    const livesElement = document.getElementById('lives');
+    const levelElement = document.getElementById('level');
+    const gameOverElement = document.getElementById('gameOver');
+    const finalScoreElement = document.getElementById('finalScore');
+    const finalLevelElement = document.getElementById('finalLevel');
+    const comboIndicator = document.getElementById('comboIndicator');
+    const comboCount = document.getElementById('comboCount');
+    let gameState = { score: 0, lives: 3, level: 1, kittyPosition: 400, gameRunning: true, items: [], gameSpeed: 1, combo: 0, maxCombo: 0, lastCollectTime: 0 };
+    const heartEmojis = ['💖','💕','💗','💝','💘','💌','💞','💓'];
+    const obstacleEmojis = ['🌧️','⚡','🌪️','❄️','🌊','🔥','☄️','🌑'];
+    const powerUpEmojis = ['🌟','✨','💫','🎁','🍰','🧁','🎀','👑'];
+    let keys = {};
+    document.addEventListener('keydown', (e) => { keys[e.key] = true; });
+    document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+    document.getElementById('btnLeft').addEventListener('touchstart', () => keys['ArrowLeft'] = true);
+    document.getElementById('btnLeft').addEventListener('touchend', () => keys['ArrowLeft'] = false);
+    document.getElementById('btnRight').addEventListener('touchstart', () => keys['ArrowRight'] = true);
+    document.getElementById('btnRight').addEventListener('touchend', () => keys['ArrowRight'] = false);
 
-// Mantener pulsado
-let leftInterval, rightInterval;
-
-leftBtn.addEventListener('touchstart', () => {
-    leftInterval = setInterval(() => moveKitty(-5), 50);
-});
-leftBtn.addEventListener('touchend', () => {
-    clearInterval(leftInterval);
-});
-
-rightBtn.addEventListener('touchstart', () => {
-    rightInterval = setInterval(() => moveKitty(5), 50);
-});
-rightBtn.addEventListener('touchend', () => {
-    clearInterval(rightInterval);
-});
-
-        document.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
-            helloKitty.classList.remove('moving');
-        });
         
         function updateMovement() {
             if (!gameState.gameRunning) return;
@@ -665,7 +621,7 @@ rightBtn.addEventListener('touchend', () => {
         function showScorePopup(x, y, points, text = '') {
             const popup = document.createElement('div');
             popup.className = 'score-popup';
-            popup.innerHTML = text || +${points};
+            popup.innerHTML = text || `+${points}`;
             popup.style.left = x + 'px';
             popup.style.top = y + 'px';
             gameArea.appendChild(popup);
